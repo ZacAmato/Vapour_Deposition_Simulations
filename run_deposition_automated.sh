@@ -14,7 +14,7 @@ gmx mdrun -s quick_silic_surface_${COUNTER}H2O_relax_20K.tpr -deffnm quick_silic
 
 # Then run again for another 5 ps or less
 
-# if its not attached then do another  --- should I be doing if statements? Also to scale it up to much larger?
+# if its not attached then do another 
 
 
 

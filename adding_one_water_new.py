@@ -4,10 +4,11 @@ import numpy as np
 import random
 from scipy.stats import maxwell
 
+# call coordinate file to add molecule to
 gro_file = str('quick_silic_surface_2H2O_relax_20K')
 
+# name ofoutput coordinate file with added molecule
 output = str('silic_surface_3H2O')
-
 
 gro_Zmax_file = open(f'{gro_file}.gro', 'r')
 
@@ -16,6 +17,7 @@ osef = gro_Zmax_file.readline()
 
 Zmax = 0
 
+# find topmost surface molecule
 for iline in range(200, 300):
     
     line = gro_Zmax_file.readline()
@@ -51,7 +53,7 @@ nwater = 0
 z_ref = 0.0
 ntot = 0
 
-
+# next section is to calculate number of each type of atom that's present
 for iatom in range(natoms):
 
     line_to_read = gro_input_file.readline()
@@ -186,7 +188,7 @@ gro_output_file.write(line_blank)
 
 count_water = 301
 
-
+# next section is to copy original coordinate information for each atom to be pasted into new output file before then adding new molecule
 for iatom in range(natoms):
 
     if iatom < 9:
@@ -374,7 +376,7 @@ for iatom in range(natoms):
                     gro_output_file.write(line)
 
         
-
+# next section is initialising position and velocity of new molecule being added
 z_altitude = 0.0
 initial_temperature = 300.0
 
@@ -389,6 +391,7 @@ for jatom in range(natoms):
 
             z_altitude = z_atom[jatom] - Zmax
 
+# starting position to be 15 angstroms above topmost surface molecule
 initial_altitude_oxy = Zmax + z_altitude + 1.5
 
 direction_x_ini_1 = random.uniform(-1,1)
@@ -411,6 +414,7 @@ initial_x_mw = initial_x_oxy + 0.01546*direction_x_ini_1/(np.sqrt(direction_x_in
 initial_y_mw = initial_y_oxy + 0.01546*direction_y_ini_1/(np.sqrt(direction_x_ini_1**2+direction_y_ini_1**2+direction_z_ini_1**2))
 initial_z_mw = initial_altitude_oxy + 0.01546*direction_z_ini_1/(np.sqrt(direction_x_ini_1**2+direction_y_ini_1**2+direction_z_ini_1**2))
 
+# initialise velocities based on temperature wanted using Maxwell boltzmann dist
 locat_vel = 3.72e-2*np.sqrt(initial_temperature)
 scale_vel = 2.15e-2*np.sqrt(initial_temperature)
 
@@ -428,6 +432,7 @@ initial_v_z = initial_v_z_unscaled*initial_speed/(np.sqrt(initial_v_x_unscaled**
 #initial_v_y = initial_speed*0.0
 #initial_v_z = -initial_speed
 
+# add all this calculated info for new molecule into coordinate file
 line = '  '+str(nsilica+nwater+1) + 'H2O' + '    ' + 'OW' + '   ' + str(
             natoms + 1) + '' + "{:8.3f}".format(initial_x_oxy) + "{:8.3f}".format(
     initial_y_oxy) + "{:8.3f}".format(initial_altitude_oxy)+ ' ' +"{:7.4f}".format(initial_v_x[0]) + ' ' +"{:7.4f}".format(
@@ -452,6 +457,7 @@ line = '  '+str(nsilica+nwater+1) + 'H2O' + '    ' + 'MW' + '   '  + str(
     initial_v_y[0]) + ' ' + "{:7.4f}".format(initial_v_z[0]) +'\n'
 gro_output_file.write(line)
 
+# add box size info at bottom of coordinate file
 line = '   '+"{0:.5f}".format(x_box)+'   '+"{0:.5f}".format(y_box)+'   '+"{0:.5f}".format(z_box)+'   '
 gro_output_file.write(line)
 

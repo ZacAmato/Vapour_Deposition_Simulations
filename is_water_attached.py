@@ -7,7 +7,7 @@ import os
 import random
 from scipy.stats import maxwell
 
-gro_input_file = open('C:/Users/Gromacs/XY_PBC_Runs/Co-deposition/New_deposition/surface/same name/quick_silic_surface_1H2O_relax_20K.gro', 'r')
+gro_input_file = open('../quick_silic_surface_1H2O_relax_20K.gro', 'r')
 
 osef = gro_input_file.readline()
 
